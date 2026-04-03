@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health-Check Dashboard</title>
+    
+    <!-- Google Fonts: Outfit for a premium, modern medical look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.6s ease-in-out;
+        }
+        
+        .bg-alert-mode {
+            background-color: #ef4444 !important; /* Tailwind bg-red-500 */
+        }
+        
+        /* Subtle animation for the UI card */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 transition-colors duration-500" id="body-bg">
+
+    <!-- Dashboard Widget -->
+    <div class="bg-white rounded-[2rem] shadow-2xl overflow-hidden max-w-md w-full relative z-10 fade-in border border-slate-100">
+        
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white text-center rounded-t-[2rem]">
+            <div class="inline-flex items-center justify-center w-12 h-12 bg-white/20 rounded-full mb-3 backdrop-blur-sm -mb-0">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight mt-2">Health Dashboard</h1>
+            <p class="text-blue-100 text-sm mt-1 font-medium tracking-wide opacity-90">Smart Vitals Monitor</p>
+        </div>
+
+        <!-- Input Form -->
+        <div class="p-8">
+            <form id="health-form" class="space-y-6">
+                <!-- Age Input -->
+                <div>
+                    <label for="age" class="block text-sm font-semibold text-slate-700 mb-2">Patient Age</label>
+                    <input type="number" id="age" name="age" min="1" max="120" required
+                        class="w-full px-5 py-3.5 bg-slate-50 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium placeholder-slate-400"
+                        placeholder="e.g., 35">
+                </div>
+
+                <!-- Heart Rate Input -->
+                <div>
+                    <label for="heart-rate" class="block text-sm font-semibold text-slate-700 mb-2">Heart Rate (BPM)</label>
+                    <input type="number" id="heart-rate" name="heart-rate" min="30" max="250" required
+                        class="w-full px-5 py-3.5 bg-slate-50 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium placeholder-slate-400"
+                        placeholder="e.g., 75">
+                </div>
+
+                <!-- Action Button -->
+                <button type="button" id="simulate-btn"
+                    class="w-full mt-4 bg-slate-900 hover:bg-blue-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 outline-none flex justify-center items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Simulate Report
+                </button>
+            </form>
+
+            <!-- Diagnostic Results Section -->
+            <div id="result-section" class="mt-8 hidden opacity-0 transition-opacity duration-500 delay-100">
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Diagnostic Summary</h3>
+                    
+                    <div id="tip-container" class="bg-blue-50 text-blue-800 p-5 rounded-2xl text-sm leading-relaxed font-medium border border-blue-100 flex items-start gap-3">
+                        <!-- JS handles inner content -->
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Array of random health tips
+        const healthTips = [
+            "Stay hydrated by drinking at least 8 glasses of water a day.",
+            "Aim for 30 minutes of moderate physical activity daily.",
+            "Incorporate a colorful variety of fruits and vegetables into your meals.",
+            "Prioritize 7-9 hours of quality sleep each night for optimal recovery.",
+            "Practice deep breathing exercises to manage stress levels effectively.",
+            "Limit processed foods and focus on whole, nutrient-dense ingredients.",
+            "Take regular breaks from screens to reduce eye strain and fatigue."
+        ];
+
+        // DOM Elements
+        const simulateBtn = document.getElementById('simulate-btn');
+        const ageInput = document.getElementById('age');
+        const hrInput = document.getElementById('heart-rate');
+        const bodyBg = document.getElementById('body-bg');
+        const resultSection = document.getElementById('result-section');
+        const tipContainer = document.getElementById('tip-container');
+
+        // Logic Handler
+        simulateBtn.addEventListener('click', () => {
+            const age = parseInt(ageInput.value);
+            const hr = parseInt(hrInput.value);
+
+            // Validation
+            if (!age || !hr) {
+                alert("Please enter valid numbers for Patient Age and Heart Rate.");
+                return;
+            }
+
+            // Generate Random Health Tip
+            const randomIndex = Math.floor(Math.random() * healthTips.length);
+            let reportText = healthTips[randomIndex];
+
+            // Evaluate Heart Rate Condition
+            if (hr > 100) {
+                // Tachycardia / Elevated HR Trigger -> Toggle Red Theme
+                bodyBg.classList.remove('bg-slate-50');
+                bodyBg.classList.add('bg-alert-mode');
+                
+                // Set alert styling for the tip card
+                tipContainer.className = "bg-red-50 text-red-800 p-5 rounded-2xl text-sm leading-relaxed font-semibold border border-red-100 flex items-start gap-3";
+                
+                // Append warning text
+                tipContainer.innerHTML = `
+                    <svg class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <div>
+                        <span class="block text-red-600 mb-1">Alert: Elevated Heart Rate (${hr} BPM)</span>
+                        <span class="font-normal opacity-90">${reportText} Please consult a healthcare professional regarding your resting heart rate.</span>
+                    </div>
+                `;
+            } else {
+                // Normal HR Trigger -> Revert to Clean Theme
+                bodyBg.classList.remove('bg-alert-mode');
+                bodyBg.classList.add('bg-slate-50');
+
+                // Set normal styling for the tip card
+                tipContainer.className = "bg-blue-50 text-blue-800 p-5 rounded-2xl text-sm leading-relaxed font-semibold border border-blue-100 flex items-start gap-3";
+                
+                // Append normal text
+                tipContainer.innerHTML = `
+                    <svg class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <span class="block text-blue-600 mb-1">Vitals Normal (${hr} BPM)</span>
+                        <span class="font-normal opacity-90">${reportText}</span>
+                    </div>
+                `;
+            }
+
+            // Reveal result section with animation
+            resultSection.classList.remove('hidden');
+            setTimeout(() => {
+                resultSection.classList.remove('opacity-0');
+            }, 10);
+        });
+    </script>
+</body>
+</html>
