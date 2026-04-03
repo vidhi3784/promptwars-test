@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick-Link Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .dashboard {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #greeting {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        #time {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .links-section {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 2rem;
+        }
+
+        .links-section h2 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn svg {
+            margin-right: 0.75rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        .notes-section {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        #quickNotes {
+            width: 100%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 0.75rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s ease;
+            font-size: 0.875rem;
+            font-family: inherit;
+        }
+
+        #quickNotes:focus {
+            border-color: var(--accent);
+        }
+
+        #quickNotes::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .dashboard { padding: 2rem; }
+            #time { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <div id="greeting">Hello!</div>
+        <div id="time">00:00:00</div>
+
+        <div class="links-section">
+            <h2>My Daily Links</h2>
+            <div class="btn-grid">
+                <a href="https://www.google.com" target="_blank" class="btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    Google
+                </a>
+                <a href="https://github.com" target="_blank" class="btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    GitHub
+                </a>
+                <a href="https://hack2skill.com" target="_blank" class="btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    Hack2Skill
+                </a>
+            </div>
+        </div>
+
+        <div class="notes-section">
+            <textarea id="quickNotes" placeholder="Type a quick thought..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        function updateDashboard() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            // Update Time
+            document.getElementById('time').textContent = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}`;
+
+            // Update Greeting
+            let greetingText = "";
+            if (hours < 12) {
+                greetingText = "Good Morning";
+            } else if (hours < 18) {
+                greetingText = "Good Afternoon";
+            } else if (hours < 21) {
+                greetingText = "Good Evening";
+            } else {
+                greetingText = "Good Night";
+            }
+            document.getElementById('greeting').textContent = greetingText;
+        }
+
+        // Run every second
+        setInterval(updateDashboard, 1000);
+        updateDashboard(); // Initial call
+
+        // Notes LocalStorage logic
+        const quickNotes = document.getElementById('quickNotes');
+        // Load existing notes
+        quickNotes.value = localStorage.getItem('dashboardNotes') || '';
+        // Save notes on typing
+        quickNotes.addEventListener('input', () => {
+            localStorage.setItem('dashboardNotes', quickNotes.value);
+        });
+    </script>
+</body>
+</html>
